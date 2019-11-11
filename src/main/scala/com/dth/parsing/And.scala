@@ -1,12 +1,12 @@
 package com.dth.parsing
 
-case class And(ors: Array[Or]) extends Expression {
+case class And(ors: Or*) extends Expression {
   def :++(newOr: Or): And = {
-    And(ors :+ newOr)
+    And(ors :+ newOr:_*)
   }
 
   def :++(and: And): And = {
-    And(ors :++ and.ors)
+    And(ors :++ and.ors:_*)
   }
 
   override def toString: String = this.getClass.getSimpleName + "[" + ors.mkString(",") + "]"
@@ -14,8 +14,4 @@ case class And(ors: Array[Or]) extends Expression {
     case and: And => and.ors sameElements ors
     case _ => false
   }
-}
-
-object And {
-  def apply(or: Or): And = And(Array(or))
 }

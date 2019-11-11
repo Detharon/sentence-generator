@@ -13,7 +13,7 @@ class StructuredTextGenerator extends TextGenerator {
       .mkString(" ")
   }
 
-  private def randomWord(expression: Array[Any]): String = {
+  private def randomWord(expression: Seq[Any]): String = {
     val expressionOrWord = expression(random.nextInt(expression.length))
 
     expressionOrWord match {

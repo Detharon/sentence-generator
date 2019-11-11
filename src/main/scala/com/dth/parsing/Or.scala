@@ -1,8 +1,8 @@
 package com.dth.parsing
 
-case class Or(contents: Array[Any]) extends Expression {
+case class Or(contents: Any*) extends Expression {
   def :++(or: Or): Or = {
-    Or(contents :++ or.contents)
+    Or(contents :++ or.contents:_*)
   }
 
   def :++(and: And): Or = {
@@ -14,9 +14,4 @@ case class Or(contents: Array[Any]) extends Expression {
     case or: Or => contents sameElements or.contents
     case _ => false
   }
-}
-
-object Or {
-  def apply(word: String): Or = new Or(Array(word.asInstanceOf[Any]))
-  def apply(and: And): Or = new Or(Array(and.asInstanceOf[Any]))
 }

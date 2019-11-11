@@ -24,7 +24,7 @@ class ExpressionParser(val input: ParserInput) extends Parser {
   }
 
   def AndCombined: Rule1[And] = rule {
-    OrText ~> ((a: Or) => new And(Array(a))) ~ zeroOrMore(
+    OrText ~> ((a: Or) => new And(a)) ~ zeroOrMore(
       '&' ~ OrText ~> ((a: And, b: Or) => a :++ b) |
         "&(" ~ AndCombined ~ ")" ~> ((a: And, b: And)  => a :++ b)
     )
