@@ -4,25 +4,41 @@ import org.parboiled2._
 
 class ExpressionParser(val input: ParserInput) extends Parser {
 
-  def Word: Rule1[Or] = rule {
+  def Text: Rule1[Or] = rule {
     capture(oneOrMore(CharPredicate.AlphaNum)) ~> ((string: String) => Or(string))
   }
 
-  def Words: Rule1[Or] = rule {
-    Word ~ zeroOrMore(
-      '|' ~ Word ~> ((a: Or, b: Or) => a :++ b) |
-        "|(" ~ And ~ ')' ~> ((a: Or, b: And) => a :++ b)
+  def OrCombined: Rule1[Or] = rule {
+    Text ~ zeroOrMore(
+      '|' ~ Text ~> ((a: Or, b: Or) => a :++ b) |
+        "|(" ~ AndText ~ ')' ~> ((a: Or, b: And) => a :++ b)
     )
   }
 
-  def And: Rule1[And] = rule {
-    Words ~> ((a: Or) => new And(Array(a))) ~ zeroOrMore(
-      '&' ~ Words ~> ((a: And, b: Or) => a :++ b) |
-        "&(" ~ And ~ ")" ~> ((a: And, b: And)  => a :++ b)
+  def OrParenthesis: Rule1[Or] = rule {
+    '(' ~ OrCombined ~ ')'
+  }
+
+  def OrText: Rule1[Or] = rule {
+    OrCombined | OrParenthesis
+  }
+
+  def AndCombined: Rule1[And] = rule {
+    OrText ~> ((a: Or) => new And(Array(a))) ~ zeroOrMore(
+      '&' ~ OrText ~> ((a: And, b: Or) => a :++ b) |
+        "&(" ~ AndCombined ~ ")" ~> ((a: And, b: And)  => a :++ b)
     )
+  }
+
+  def AndParenthesis: Rule1[And] = rule {
+    '(' ~ AndCombined ~ ')'
+  }
+
+  def AndText: Rule1[And] = rule {
+    AndParenthesis | AndCombined
   }
 
   def InputLine: Rule1[And] = rule {
-    And ~ EOI
+    AndText ~ EOI
   }
 }
