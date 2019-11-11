@@ -9,12 +9,12 @@ class ExpressionParserTest extends FlatSpec {
 
   it should "parse a|a" in {
     val result = checkThatSucceeded(new ExpressionParser("a|b"))
-    assert(result == new And(Array(new Or(Array[Any]("a", "b")))))
+    assert(result == And(Array(Or(Array[Any]("a", "b")))))
   }
 
   it should "parse a&b" in {
     val result = checkThatSucceeded(new ExpressionParser("a&b"))
-    assert(result == new And(Array(new Or("a"), new Or("b"))))
+    assert(result == And(Array(Or("a"), Or("b"))))
   }
 
   private def checkThatSucceeded(parser: ExpressionParser): And = {

@@ -5,7 +5,7 @@ import org.parboiled2._
 class ExpressionParser(val input: ParserInput) extends Parser {
 
   def Word: Rule1[Or] = rule {
-    capture(oneOrMore(CharPredicate.AlphaNum)) ~> ((string: String) => new Or(string))
+    capture(oneOrMore(CharPredicate.AlphaNum)) ~> ((string: String) => Or(string))
   }
 
   def Words: Rule1[Or] = rule {
