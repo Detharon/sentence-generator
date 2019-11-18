@@ -16,7 +16,7 @@ class ExpressionParser(val input: ParserInput) extends Parser {
   }
 
   def OrParenthesis: Rule1[Or] = rule {
-    '(' ~ OrCombined ~ ')'
+    '(' ~ OrText ~ ')'
   }
 
   def OrText: Rule1[Or] = rule {
@@ -31,7 +31,7 @@ class ExpressionParser(val input: ParserInput) extends Parser {
   }
 
   def AndParenthesis: Rule1[And] = rule {
-    '(' ~ AndCombined ~ ')'
+    '(' ~ AndText ~ ')'
   }
 
   def AndText: Rule1[And] = rule {

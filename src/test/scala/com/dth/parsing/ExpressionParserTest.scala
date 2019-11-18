@@ -18,7 +18,7 @@ class ExpressionParserTest extends FlatSpec {
   }
 
   it should "parse (((a|a)))" in {
-    val result = checkThatSucceeded(new ExpressionParser("(a|b)"))
+    val result = checkThatSucceeded(new ExpressionParser("(((a|b)))"))
     assert(result == And(Or("a", "b")))
   }
 
@@ -33,7 +33,7 @@ class ExpressionParserTest extends FlatSpec {
   }
 
   it should "parse (((a&b)))" in {
-    val result = checkThatSucceeded(new ExpressionParser("(a&b)"))
+    val result = checkThatSucceeded(new ExpressionParser("(((a&b)))"))
     assert(result == And(Or("a"), Or("b")))
   }
 
