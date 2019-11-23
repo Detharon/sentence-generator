@@ -8,36 +8,38 @@ import scala.util.{Failure, Success}
 class ExpressionParserTest extends FlatSpec {
 
   it should "parse a|a" in {
-    val result = checkThatSucceeded(new ExpressionParser("a|b"))
+    val result = parse("a|b")
     assert(result == And(Or("a", "b")))
   }
 
   it should "parse (a|a)" in {
-    val result = checkThatSucceeded(new ExpressionParser("(a|b)"))
+    val result = parse("(a|b)")
     assert(result == And(Or("a", "b")))
   }
 
   it should "parse (((a|a)))" in {
-    val result = checkThatSucceeded(new ExpressionParser("(((a|b)))"))
+    val result = parse("(((a|b)))")
     assert(result == And(Or("a", "b")))
   }
 
   it should "parse a&b" in {
-    val result = checkThatSucceeded(new ExpressionParser("a&b"))
+    val result = parse("a&b")
     assert(result == And(Or("a"), Or("b")))
   }
 
   it should "parse (a&b)" in {
-    val result = checkThatSucceeded(new ExpressionParser("(a&b)"))
+    val result = parse("(a&b)")
     assert(result == And(Or("a"), Or("b")))
   }
 
   it should "parse (((a&b)))" in {
-    val result = checkThatSucceeded(new ExpressionParser("(((a&b)))"))
+    val result = parse("(((a&b)))")
     assert(result == And(Or("a"), Or("b")))
   }
 
-  private def checkThatSucceeded(parser: ExpressionParser): And = {
+  private def parse(text: String): And = {
+    val parser: ExpressionParser = new ExpressionParser(text)
+
     parser.InputLine.run() match {
       case Success(and: And) => and
       case Failure(error: ParseError) =>
