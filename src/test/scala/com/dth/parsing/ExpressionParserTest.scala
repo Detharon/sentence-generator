@@ -7,6 +7,10 @@ import scala.util.{Failure, Success}
 
 class ExpressionParserTest extends FlatSpec {
 
+  // ==================================================
+  // Single or
+  // ==================================================
+
   it should "parse a|a" in {
     val result = parse("a|b")
     assert(result == And(Or("a", "b")))
@@ -22,6 +26,15 @@ class ExpressionParserTest extends FlatSpec {
     assert(result == And(Or("a", "b")))
   }
 
+  it should "parse (a)|(a)" in {
+    val result = parse("(a)|(b)")
+    assert(result == And(Or("a", "b")))
+  }
+
+  // ==================================================
+  // Single and
+  // ==================================================
+
   it should "parse a&b" in {
     val result = parse("a&b")
     assert(result == And(Or("a"), Or("b")))
@@ -34,6 +47,11 @@ class ExpressionParserTest extends FlatSpec {
 
   it should "parse (((a&b)))" in {
     val result = parse("(((a&b)))")
+    assert(result == And(Or("a"), Or("b")))
+  }
+
+  it should "parse (a)&(b)" in {
+    val result = parse("(a)&(b)")
     assert(result == And(Or("a"), Or("b")))
   }
 

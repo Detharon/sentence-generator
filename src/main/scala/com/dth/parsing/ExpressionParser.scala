@@ -4,8 +4,16 @@ import org.parboiled2._
 
 class ExpressionParser(val input: ParserInput) extends Parser {
 
-  def Text: Rule1[Or] = rule {
+  def RawText: Rule1[Or] = rule {
     capture(oneOrMore(CharPredicate.AlphaNum)) ~> ((string: String) => Or(string))
+  }
+
+  def TextParenthesis: Rule1[Or] = rule {
+    '(' ~ RawText ~ ')'
+  }
+
+  def Text: Rule1[Or] = rule {
+    RawText | TextParenthesis
   }
 
   def OrCombined: Rule1[Or] = rule {
@@ -35,7 +43,7 @@ class ExpressionParser(val input: ParserInput) extends Parser {
   }
 
   def AndText: Rule1[And] = rule {
-    AndParenthesis | AndCombined
+    AndCombined | AndParenthesis
   }
 
   def InputLine: Rule1[And] = rule {
