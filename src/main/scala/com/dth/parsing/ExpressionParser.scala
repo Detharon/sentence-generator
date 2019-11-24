@@ -9,7 +9,7 @@ class ExpressionParser(val input: ParserInput) extends Parser {
   }
 
   def TextParenthesis: Rule1[Or] = rule {
-    '(' ~ RawText ~ ')'
+    '(' ~ Text ~ ')'
   }
 
   def Text: Rule1[Or] = rule {
